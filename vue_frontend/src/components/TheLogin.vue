@@ -1,0 +1,131 @@
+<template>
+    <div class="container mx-auto">
+  <div class="flex justify-center items-center py-10">
+    <form
+      @submit.prevent="loginUser"
+      class="p-16 rounded shadow-lg bg-slate-50"
+    >
+      <div class="text-center font-bold text-2xl my-2">Login Form</div>
+      <div class="mb-4">
+        <label for="Email" class="block text-gray-700 text-sm font-bold mb-2"
+          >Email:</label
+        >
+        <input
+          type="email"
+          placeholder="Email Address"
+          id="Email"
+          v-model="formData.email"
+          required
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        />
+      </div>
+
+      <div class="mb-4">
+        <label for="password" class="block text-gray-700 text-sm font-bold mb-2"
+          >Password:</label
+        >
+        <input
+          type="password"
+          placeholder="Password"
+          id="password"
+          v-model="formData.password"
+          required
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        />
+      </div>
+          <!-- Render the captcha form here -->
+          <!-- <div v-html="captchaForm.captcha" class="mb-4"></div> -->
+
+          <div class="mb-2 flex justify-between">
+          <label for="captcha" class="mt-2.5 text-gray-700 text-sm font-bold mb-2">Captcha:-</label>
+          <p class="mt-2 mx-2 bg-amber-200 rounded line-through font-bold">{{ captchaForm }}</p>
+          <input type="text" v-model="formData.captcha" required id="captcha" placeholder="Enter The Numbers" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+
+      <div class="flex justify-center">
+        <button
+          type="submit"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded"
+        >
+          Login
+        </button>
+      </div>
+      <p class="text-green-600 text-md text-center" v-if="message">
+        {{ message }}, redirecting...
+      </p>
+      <div>
+      <p class="text-red-600 text-md text-center" v-if="errors">{{ errors.errors.fields }}
+        ! Try Again
+      </p>
+    </div>
+    <p class="my-1">Don't have account? <RouterLink to="/register" class="text-blue-700">Register Now</RouterLink></p>
+    </form>
+  </div>
+</div>
+</template>None
+
+<script setup>
+import axios from "axios";
+import { ref, onMounted } from "vue";
+import { useStore } from 'vuex';
+import { useRouter } from "vue-router";
+
+const store = useStore()
+const router = useRouter();
+const message = ref("");
+const err = ref(false);
+const errors = ref('')
+const captchaForm = ref('');
+
+
+
+const formData = {
+  email: "",
+  password: "",
+  captcha: "",
+};
+
+const loginUser = (e) => {
+  axios.defaults.headers.common['Authorization'] = ''
+  localStorage.removeItem('access')
+  localStorage.removeItem('refresh')
+  axios
+    .post("/auth/login/", formData)
+    .then((response) => {
+      // Registration successful 
+      errors.value = null
+      err.value = false;
+      console.log(response.data.username)
+      const access = response.data.token.access;
+      store.commit('setAccess', access)
+      axios.defaults.headers.common['Authorization'] = 'JWT ' + access
+      localStorage.setItem('access', access);
+      const refresh = response.data.token.refresh;
+      localStorage.setItem('refresh', refresh);
+      message.value = response.data.msg;
+      console.log(message); // Show success message to the user
+      setTimeout(() => {
+        router.push("/");
+      }, 1000);
+    })
+    .catch((error) => {
+      // Registration failed
+      console.error(error);
+      err.value = true;
+      errors.value = error.response.data
+      // Handle error and show appropriate feedback to the user
+    });
+};
+
+onMounted(async () => {
+  try {
+    const response = await axios.get("/auth/get_captcha/");
+    captchaForm.value = response.data;
+    console.log(response.data)
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+
+  </script>
