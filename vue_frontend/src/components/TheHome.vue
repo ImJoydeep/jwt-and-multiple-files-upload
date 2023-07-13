@@ -124,11 +124,11 @@ const getStatusClass = (status) => {
   return "";
 };
 
-onMounted(() => {
-    if(!localStorage.getItem('access')){
-      router.push('/login')
-    }
-})
+// onMounted(() => {
+//     if(!localStorage.getItem('access')){
+//       router.push('/login')
+//     }
+// })
 </script>
 
 <style>

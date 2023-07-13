@@ -39,6 +39,7 @@ class UserLoginView(APIView):
     password = serializer.data.get('password')
     captcha = serializer.data.get('captcha')
     if str_num == str(captcha):
+      print(captcha)
       user = authenticate(email=email, password=password)
       if user is not None:
         token = get_tokens_for_user(user)
