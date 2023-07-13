@@ -69,7 +69,10 @@
         </button>
       </div>
       <p class="text-green-600 text-md text-center" v-if="message">{{ message }}, redirecting</p>
-      <p class="text-red-600 text-md text-center" v-if="err">Registration Failed! Try Again</p>
+      <div v-for="errors in err">
+      <p class="text-red-600 text-md text-center" v-if="errors.email" >{{ errors.email }}</p>
+      <p class="text-red-600 text-sm text-center" v-if="errors.non_field_errors"  >{{ errors.non_field_errors }}</p>
+    </div>
       <p>Already have account? <RouterLink to="/login" class="text-blue-700">Login</RouterLink></p>
     </form>
   </div>
@@ -83,7 +86,7 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 const message = ref('');
-const err = ref(false);
+const err = ref('');
 
 const formData = {
   email: "",
@@ -98,7 +101,7 @@ const registerUser = () => {
     .post("/auth/register/", formData)
     .then((response) => {
       // Registration successful
-      err.value = false
+      err.value = ''
       const token = response.data.token;
       message.value = response.data.msg;
       console.log(token); // Do something with the token
@@ -109,8 +112,9 @@ const registerUser = () => {
     .catch((error) => {
       // Registration failed
       console.error(error.response.data);
-      err.value = true
+      err.value = error.response.data
       // Handle error and show appropriate feedback to the user
     });
 };
+
 </script>

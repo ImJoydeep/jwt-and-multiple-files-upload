@@ -7,16 +7,12 @@
     >
       <RouterLink :to="{ name: 'home' }">
         <div class="flex items-center gap-3">
-          <i class="fa-solid fa-globe text-2xl"></i>
+          <font-awesome-icon :icon="['fas', 'globe']" size="2xl" />
           <p class="text-2xl text-blue-100">Website</p>
         </div>
       </RouterLink>
       <div class="flex gap-3 flex-1 justify-end">
-        <i
-          class="fa-solid fa-user text-2xl hover:text-secondary duration-150 cursor-pointer"
-          @click="toggleModal"
-          ><span class="text-xs mx-2">user</span></i
-        >
+        <font-awesome-icon :icon="['fass', 'user']" size="2xl" @click="toggleModal"></font-awesome-icon>
       </div>
       <BaseModal :modalActive="modalActive" @close-modal="toggleModal">
         <div class="grid text-black justify-items-center">

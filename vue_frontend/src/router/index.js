@@ -24,6 +24,21 @@ const router = createRouter({
       component: LoginView
     },
     {
+      path: '/:pathMatch(.*)*',
+      name: 'NotFound',
+      component: () => import('../components/NotFound.vue'),
+    },
+    {
+      path: '/forgetpassword',
+      name: 'forgetdpassword',
+      component: () => import('../components/ForgetPassword.vue'),
+    },
+    {
+      path: '/resetpassword/:uid/:token',
+      name: 'resetpassword',
+      component: () => import('../components/ResetPassrord.vue'),
+    },
+    {
       path: '/about',
       name: 'about',
       // route level code-splitting

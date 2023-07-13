@@ -36,10 +36,10 @@
           <!-- Render the captcha form here -->
           <!-- <div v-html="captchaForm.captcha" class="mb-4"></div> -->
 
-          <div class="mb-2 flex justify-between">
-          <label for="captcha" class="mt-2.5 text-gray-700 text-sm font-bold mb-2">Captcha:-</label>
-          <p class="mt-2 mx-2 bg-amber-200 rounded line-through font-bold">{{ captchaForm }}</p>
-          <input type="text" v-model="formData.captcha" required id="captcha" placeholder="Enter The Numbers" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+          <div class="mb-2 ">
+          <label for="captcha" class="mt-2.5 text-gray-700 text-sm font-bold mb-2 w-1/2">Captcha:-</label>
+          <p class="mt-2 mx-2 bg-amber-200 rounded line-through font-bold w-1/2">{{ captchaForm }}</p>
+          <input type="text" v-model="formData.captcha" required id="captcha" placeholder="Enter The Numbers" class=" w-full shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
         </div>
 
       <div class="flex justify-center">
@@ -54,11 +54,12 @@
         {{ message }}, redirecting...
       </p>
       <div>
-      <p class="text-red-600 text-md text-center" v-if="errors">{{ errors.errors.fields }}
+      <p class="text-red-600 text-md text-center" v-if="errors">{{ errors }}
         ! Try Again
       </p>
     </div>
-    <p class="my-1">Don't have account? <RouterLink to="/register" class="text-blue-700">Register Now</RouterLink></p>
+    <p class="my-2"><RouterLink to="/forgetpassword" class="text-blue-700">Forgotten password?</RouterLink></p>
+    <p class="bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-6 rounded"><RouterLink to="/register" class="text-white">Register Now</RouterLink></p>
     </form>
   </div>
 </div>
@@ -95,13 +96,12 @@ const loginUser = (e) => {
       // Registration successful 
       errors.value = null
       err.value = false;
-      console.log(response.data.username)
+      // console.log(response.data.username)
       const access = response.data.token.access;
       store.commit('setAccess', access)
       axios.defaults.headers.common['Authorization'] = 'JWT ' + access
       localStorage.setItem('access', access);
       const refresh = response.data.token.refresh;
-      localStorage.setItem('refresh', refresh);
       message.value = response.data.msg;
       console.log(message); // Show success message to the user
       setTimeout(() => {
@@ -110,22 +110,37 @@ const loginUser = (e) => {
     })
     .catch((error) => {
       // Registration failed
-      console.error(error);
       err.value = true;
-      errors.value = error.response.data
+      errors.value = error.response.data.errors.fields
+      console.log(error.response.data.errors.fields)
       // Handle error and show appropriate feedback to the user
     });
 };
 
-onMounted(async () => {
+const MAX_RELOAD_ATTEMPTS = 3;
+let reloadAttempts = 0;
+
+async function reloadPage() {
   try {
     const response = await axios.get("/auth/get_captcha/");
     captchaForm.value = response.data;
-    console.log(response.data)
+    console.log(response.data);
+    if (captchaForm.value === '') {
+      if (reloadAttempts < MAX_RELOAD_ATTEMPTS) {
+        reloadAttempts++;
+        reloadPage(); // Retry the reload
+      } else {
+        console.log('Maximum reload attempts reached. Unable to load captcha.');
+      }
+    }
   } catch (error) {
     console.error(error);
   }
+}
+
+onMounted(() => {
+  reloadPage();
 });
 
 
-  </script>
+</script>

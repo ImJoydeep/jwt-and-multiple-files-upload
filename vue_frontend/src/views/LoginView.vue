@@ -3,7 +3,7 @@ import TheLogin from '../components/TheLogin.vue'
 </script>
 
 <template>
-  <main>
+  <div>
     <TheLogin />
-  </main>
+  </div>
 </template>

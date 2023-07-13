@@ -6,6 +6,3 @@ class UploadForm(forms.ModelForm):
     class Meta:
         model = Document
         fields = ('document',)
-
-class CaptchaForm(forms.Form):
-    captcha = CaptchaField()

@@ -1,9 +1,10 @@
-from .forms import UploadForm, CaptchaForm
+from .forms import UploadForm
 from django.core import serializers
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from account.serializers import SendPasswordResetEmailSerializer, UserChangePasswordSerializer, UserLoginSerializer, UserPasswordResetSerializer, UserProfileSerializer, UserRegistrationSerializer
+from .models import User
 from django.contrib.auth import authenticate
 from account.renderer import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -37,7 +38,6 @@ class UserLoginView(APIView):
     email = serializer.data.get('email')
     password = serializer.data.get('password')
     captcha = serializer.data.get('captcha')
-    print(captcha)
     if str_num == str(captcha):
       user = authenticate(email=email, password=password)
       if user is not None:
@@ -68,7 +68,8 @@ class SendPasswordResetEmailView(APIView):
   def post(self, request, format=None):
     serializer = SendPasswordResetEmailSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
-    return Response({'msg':'Password Reset link send. Please check your Email'}, status=status.HTTP_200_OK)
+    user_email = serializer.data['email']
+    return Response({'msg':f'Password Reset link send at {user_email}. Please check your Email'}, status=status.HTTP_200_OK)
 
 class UserPasswordResetView(APIView):
   renderer_classes = [UserRenderer]
@@ -82,7 +83,6 @@ class UploadView(APIView):
       form = UploadForm()
       if request.FILES:
           form = UploadForm(request.POST, request.FILES)
-
           if form.is_valid():
               form.save()
       
