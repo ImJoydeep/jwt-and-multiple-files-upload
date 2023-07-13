@@ -61,7 +61,6 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import axios from "axios";
-import router from "../router";
 
 
 const documents = ref([]);
@@ -124,11 +123,7 @@ const getStatusClass = (status) => {
   return "";
 };
 
-// onMounted(() => {
-//     if(!localStorage.getItem('access')){
-//       router.push('/login')
-//     }
-// })
+
 </script>
 
 <style>

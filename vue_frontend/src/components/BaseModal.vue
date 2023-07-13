@@ -2,7 +2,7 @@
   <Teleport to="body">
     <Transition name="modal-outer">
       <div
-        v-show="modalActive"
+        v-show="modalActive && store.state.isAuthenticated"
         class="absolute w-full bg-black bg-opacity-30 h-screen top-0 left-0 flex justify-center px-8"
       >
         <Transition name="modal-inner">
@@ -18,7 +18,7 @@
             >
               Close
             </button>
-            <button 
+            <button
               @click="logOut"
               class="mt-4 ml-24 text-white bg-gradient-to-r from-red-500 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 shadow-lg shadow-red-500/50 dark:shadow-lg font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-105 hover:bg-weather-secondary duration-300"
             >
@@ -34,7 +34,9 @@
 <script setup>
 import axios from "axios";
 import router from "../router";
+import { useStore } from "vuex";
 
+const store = useStore();
 
 const emit = defineEmits(["close-modal"]);
 
@@ -47,9 +49,12 @@ defineProps({
 
 const logOut = () => {
   if (localStorage.getItem("access")) {
-    axios.defaults.headers.common["Authorization"] = ""
+    axios.defaults.headers.common["Authorization"] = "";
+    store.state.access = "";
+    store.state.isAuthenticated = false;
     localStorage.removeItem("access");
-    localStorage.removeItem("refresh");
+    localStorage.removeItem("name");
+    localStorage.removeItem("email");
     router.push("/login");
   }
   emit("close-modal");

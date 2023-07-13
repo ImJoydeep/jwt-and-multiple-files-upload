@@ -106,7 +106,7 @@ const message = ref("");
 const err = ref(false);
 const errors = ref("");
 const captchaForm = ref("");
-
+const userData = ref('')
 const formData = {
   email: "",
   password: "",
@@ -116,6 +116,10 @@ const formData = {
 const loginUser = (e) => {
   axios.defaults.headers.common["Authorization"] = "";
   localStorage.removeItem("access");
+  localStorage.removeItem("name");
+  localStorage.removeItem("email");
+
+
   axios
     .post("/auth/login/", formData)
     .then((response) => {
@@ -124,9 +128,13 @@ const loginUser = (e) => {
       err.value = false;
       // console.log(response.data.username)
       const access = response.data.token.access;
+      userData.value = response.data.userData
+      console.log(userData)
       store.commit("setAccess", access);
       axios.defaults.headers.common["Authorization"] = "JWT " + access;
       localStorage.setItem("access", access);
+      localStorage.setItem("name", response.data.userData.name);
+      localStorage.setItem("email", response.data.userData.email);
       const refresh = response.data.token.refresh;
       message.value = response.data.msg;
       console.log(message); // Show success message to the user
@@ -139,9 +147,9 @@ const loginUser = (e) => {
       if (error.response.data.errors) {
         err.value = true;
         errors.value = error.response.data.errors.fields;
-        console.log(error.response.data);
+        console.log(error.response.data.errors.fields);
       } else {
-        errors.value = "Something went wrong";
+        errors.value = "Something went wrong.";
       }
       // Handle error and show appropriate feedback to the user
     });

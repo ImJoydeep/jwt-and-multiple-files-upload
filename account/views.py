@@ -43,7 +43,12 @@ class UserLoginView(APIView):
       user = authenticate(email=email, password=password)
       if user is not None:
         token = get_tokens_for_user(user)
-        return Response({'token':token, 'msg':'Login Success'}, status=status.HTTP_200_OK)
+        userObj = User.objects.get(email=user)
+        userData = {
+          "name": userObj.name,
+          "email": userObj.email,
+        }
+        return Response({'token':token,'userData':userData, 'msg':'Login Success'}, status=status.HTTP_200_OK)
       else:
         return Response({'errors':{'fields':'Email or Password is not Valid'}}, status=status.HTTP_404_NOT_FOUND)
     else:
@@ -95,4 +100,5 @@ class CaptchaView(APIView):
         global str_num
         str_num = str(num)
         return HttpResponse(str_num)
+    
 
