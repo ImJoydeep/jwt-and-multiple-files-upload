@@ -5,6 +5,8 @@ export default createStore({
     isAuthenticated: false,
     access: "",
     refresh: "",
+    name: null,
+    email: null,
   },
   getters: {},
   mutations: {
@@ -14,6 +16,8 @@ export default createStore({
         state.isAuthenticated = true;
       } else {
         state.access = "";
+        state.name = null;
+        state.email = null;
         state.isAuthenticated = false;
       }
     },
@@ -23,6 +27,8 @@ export default createStore({
     },
     removeToken(state) {
       state.access = "";
+      state.name = null;
+      state.email = null;
       state.isAuthenticated = false;
     },
   },

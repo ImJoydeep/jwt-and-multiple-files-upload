@@ -17,8 +17,8 @@
           <div class="grid text-black justify-items-center">
             <h3 class="text-xl text-blue-800">User Profile</h3>
             <i class="fa-solid fa-user text-4xl my-1"></i>
-            <h2 class="text-xl my-1">Name: <strong>{{name}}</strong></h2>
-            <h3 class="text-md my-1">Email: <strong>{{email}}</strong></h3>
+            <h2 class="text-xl my-1">Name: <strong>{{store.state.name}}</strong></h2>
+            <h3 class="text-md my-1">Email: <strong>{{store.state.email}}</strong></h3>
           </div>
         </BaseModal>
       </div>

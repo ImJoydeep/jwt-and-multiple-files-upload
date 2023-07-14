@@ -52,6 +52,8 @@ const logOut = () => {
     axios.defaults.headers.common["Authorization"] = "";
     store.state.access = "";
     store.state.isAuthenticated = false;
+    store.state.email = null;
+    store.state.name = null;
     localStorage.removeItem("access");
     localStorage.removeItem("name");
     localStorage.removeItem("email");

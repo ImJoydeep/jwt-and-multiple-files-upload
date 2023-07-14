@@ -62,10 +62,10 @@
 import { onMounted, ref } from "vue";
 import axios from "axios";
 
-
 const documents = ref([]);
 const progress = ref(0);
 const message = ref("");
+
 const selectFile = (event) => {
   Array.from(event.target.files).forEach((file) => {
     const imageURL = URL.createObjectURL(file);
@@ -74,6 +74,7 @@ const selectFile = (event) => {
       status: "is ready to upload",
       progress: 0,
       imageURL: imageURL,
+      file: file, // Store the file object in the documents array
     });
   });
 };
@@ -83,7 +84,7 @@ const upload = async () => {
     if (document.status === "is ready to upload") {
       document.status = "is uploading";
 
-      const file = document.name;
+      const file = document.file; // Retrieve the file object from the document
       const formData = new FormData();
       formData.append("document", file);
 
@@ -102,7 +103,6 @@ const upload = async () => {
       try {
         await axios.post("auth/upload/", formData, config);
         document.status = "is uploaded";
-
         console.log(document.status);
       } catch (error) {
         document.status = "failed";
@@ -111,6 +111,7 @@ const upload = async () => {
   }
   console.log(documents);
 };
+
 
 const getStatusClass = (status) => {
   if (status === "is ready to upload") {

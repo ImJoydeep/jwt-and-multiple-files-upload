@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from account.serializers import SendPasswordResetEmailSerializer, UserChangePasswordSerializer, UserLoginSerializer, UserPasswordResetSerializer, UserProfileSerializer, UserRegistrationSerializer
-from .models import User
+from .models import User, Document
 from django.contrib.auth import authenticate
 from account.renderer import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -90,7 +90,9 @@ class UploadView(APIView):
       if request.FILES:
           form = UploadForm(request.POST, request.FILES)
           if form.is_valid():
-              form.save()
+              file = Document()
+              file.document = request.FILES.get('document')
+              file.save()
       
       return Response({'success': True})
   

@@ -8,11 +8,11 @@
       <div class="text-center font-bold text-2xl mb-4">Reset Password</div>
       <div class="mb-4">
         <label for="password" class="block text-gray-700 text-sm font-bold mb-2"
-          >Password:</label
+          >New Password:</label
         >
         <input
           type="password"
-          placeholder="Password"
+          placeholder="New Password"
           id="password"
           v-model="formData.password"
           required
@@ -20,7 +20,7 @@
         />
       </div>      <div class="mb-4">
         <label for="password" class="block text-gray-700 text-sm font-bold mb-2"
-          >Password:</label
+          >Confirm Password:</label
         >
         <input
           type="password"
@@ -46,7 +46,6 @@
         ! Try Again
       </p>
     </div>
-    
     </form>
     </div>
   </div>

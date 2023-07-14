@@ -79,4 +79,7 @@ class User(AbstractBaseUser):
 
 
 class Document(models.Model):
-    document = models.FileField(upload_to='uploads')
+    document = models.FileField(upload_to='uploads/')
+    
+    def __str__(self):
+        return self.document

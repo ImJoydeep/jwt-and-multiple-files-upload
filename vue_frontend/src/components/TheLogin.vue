@@ -92,7 +92,6 @@
     </div>
   </div>
 </template>
-None
 
 <script setup>
 import axios from "axios";
@@ -119,7 +118,6 @@ const loginUser = (e) => {
   localStorage.removeItem("name");
   localStorage.removeItem("email");
 
-
   axios
     .post("/auth/login/", formData)
     .then((response) => {
@@ -132,6 +130,8 @@ const loginUser = (e) => {
       console.log(userData)
       store.commit("setAccess", access);
       axios.defaults.headers.common["Authorization"] = "JWT " + access;
+      store.state.name = response.data.userData.name;
+      store.state.email = response.data.userData.email;
       localStorage.setItem("access", access);
       localStorage.setItem("name", response.data.userData.name);
       localStorage.setItem("email", response.data.userData.email);
