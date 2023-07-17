@@ -8,19 +8,19 @@ pnpm-debug.log*
 lerna-debug.log*
 __pycache__
 env
-.env
 node_modules
 .DS_Store
 dist
 dist-ssr
 coverage
 *.local
-
+*.env
 /cypress/videos/
 /cypress/screenshots/
 
 # Editor directories and files
 .vscode/*
+.env/*
 !.vscode/extensions.json
 .idea
 *.suo
