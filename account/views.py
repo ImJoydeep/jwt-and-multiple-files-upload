@@ -87,6 +87,7 @@ class UserPasswordResetView(APIView):
 class UploadView(APIView):
   def post(self, request):
       form = UploadForm()
+      # YOU CAN restrict file format to a certain extentions. Like allow only jpeg, png etc
       if request.FILES:
           form = UploadForm(request.POST, request.FILES)
           if form.is_valid():
