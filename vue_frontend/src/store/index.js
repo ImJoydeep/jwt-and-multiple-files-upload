@@ -13,6 +13,8 @@ export default createStore({
     initializeStore(state) {
       if (localStorage.getItem("access")) {
         state.access = localStorage.getItem("access");
+        state.name = localStorage.getItem("name");
+        state.email = localStorage.getItem("email");
         state.isAuthenticated = true;
       } else {
         state.access = "";
