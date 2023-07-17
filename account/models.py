@@ -6,6 +6,7 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
 class UserManager(BaseUserManager):
     def create_user(self, email, name, tc, password=None, password2=None):
+        # If password2 is not required, then remove it. don't pass any unused variable.
         """
         Creates and saves a User with the given email, name, tc and password.
         """
