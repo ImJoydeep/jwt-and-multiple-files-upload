@@ -11,6 +11,8 @@ export default createStore({
   getters: {},
   mutations: {
     initializeStore(state) {
+      // Local storage should only be used to store non-sensitive data like users' preferences such as themes, languages, etc.
+      // You can use API calls to retrieve other important information and then set to state 
       if (localStorage.getItem("access")) {
         state.access = localStorage.getItem("access");
         state.name = localStorage.getItem("name");
